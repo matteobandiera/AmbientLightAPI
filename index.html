@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+   <head>
+      <title>Ambient Light API</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+         .content {
+             text-align: center;
+             max-width: 480px;
+             margin: 200px auto auto auto;
+         }
+         
+         .hidden {
+             display: none;
+         }
+         
+         #dl-value {
+             font-weight: bold;
+             font-size: 2em;
+         }
+         
+         .dark {
+            background-color: #000000;
+            color: #FFFFFF;
+         }
+
+         .normal {
+            background-color: #6379BB;
+            color: #B1BCDD;
+         }
+
+         .light {
+            background-color: #FFFFFF;
+            color: #000000;
+         }
+      </style>
+   </head>
+   <body>
+         <div class="content">
+               <h1>Testing Ambient Light API</h1>
+               <p id="dl-support" class="hidden">Sorry, <code>&#39;devicelight&#39;</code> event is not supported.</p>
+               <p id="dl-measure">The current light in measured by you device's light sensor is <br /><span id="dl-value">null</span> lux.</p>
+               <small>Created by <a href="http://matteobandiera.com" target="_blank">Matteo Bandiera</a> - <span id="year"></span></small>
+         </div>
+      
+      <script>
+         var date = new Date();
+         document.getElementById( "year" ).innerHTML = date.getFullYear();
+         
+         // Check if 'ondevicelight' is supported by the browser
+         if( !('ondevicelight' in window) ) {
+            console.log("Device light not available");
+            
+            // Hide 'not available message
+            document.getElementById( "dl-support" ).classList.remove( "hidden" );
+            document.getElementById( "dl-measure" ).classList.add( "hidden" );
+         } else {
+            console.log("Supported!!");
+            
+            // Get a reference for the output element
+            var lightValue = document.getElementById( "dl-value" );
+            
+            // Attach an handler for the 'devicelight' event
+            window.addEventListener( 'devicelight', function(e) {
+               lightValue.innerHTML = e.value;
+               
+               // Change body's color scheme according to the light value
+               if( e.value < 10 ) {
+                  document.body.className = "dark";
+               } else if( e.value < 1500 ) {
+                  document.body.className = "normal";
+               } else {
+                  document.body.className = "light";
+               }
+            });
+            
+         }
+      </script>
+   </body>
+</html>
